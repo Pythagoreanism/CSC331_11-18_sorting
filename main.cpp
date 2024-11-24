@@ -23,6 +23,9 @@ int main(int argc, char* argv[]) {
 
     initArray1(myArray, SIZE);
     printArray(myArray, SIZE);
+    selectionSort(myArray, SIZE);
+    cout << "\nAfter sort\n" << endl;
+    printArray(myArray, SIZE);
 
 
     return 0;
@@ -73,5 +76,23 @@ void initArray4(int arr[], int size) {
 
     for (unsigned int i = size - (size * .1); i < size; i++) {
         arr[i] = rand() % 1024;
+    }
+}
+void selectionSort(int arr[], int size) {
+    for (int i = 0; i < size + 1; i++) {
+
+        // Search for minimum within unsorted section
+        int min = i;
+        for (int j = i + 1; j < size; j++) {
+            if (arr[j] < arr[min]) {
+                min = j;
+            }
+
+        }
+        
+        // Swap
+        int temp = arr[i];
+        arr[i] = arr[min];
+        arr[min] = temp;
     }
 }
