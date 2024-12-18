@@ -11,8 +11,9 @@ void initArray3(int[], int); // c. Almost reversed similar to b.
 void initArray4(int[], int); // d. Sorted except last 10%
 void selectionSort(int[], int);
 void insertionSort(int[], int);
+void mergeSort(int[], int, int);
+void merge(int[], int, int, int, int);
 void heapSort(int[], int);
-void mergeSort(int[], int);
 void quickSort(int[], int);
 
 
@@ -23,7 +24,9 @@ int main(int argc, char* argv[]) {
 
     initArray1(myArray, SIZE);
     printArray(myArray, SIZE);
+    // selectionSort(myArray, SIZE);
     insertionSort(myArray, SIZE);
+    mergeSort(myArray, 0, SIZE);
     cout << "\nAfter sort\n" << endl;
     printArray(myArray, SIZE);
 
@@ -108,4 +111,41 @@ void insertionSort(int arr[], int n) {
         }
         arr[j + 1] = key;
     }
+}
+void mergeSort(int arr[], int start, int end) {
+    if (start < end) {
+        int middle = (start + end) / 2;
+        mergeSort(arr, start, middle);
+        mergeSort(arr, middle + 1, end);
+        merge(arr, start, middle, middle + 1, end);
+    }
+}
+void merge(int arr[], int sl, int el, int sr, int er) {
+    int* temp = new int[er + 1];
+    int i = sl;
+    int j;
+    int save = sl;
+
+    while (sl <= el && sr <= er) {
+        // Comparisons
+        if (arr[sl] < arr[sr]) {
+            temp[i++] = arr[sl++];
+        }
+        else {
+            temp[i++] = arr[sr++];
+        }
+    }
+
+    while (sl <= el) {
+        temp[i++] = arr[sl++];
+    }
+    while (sr <= er) {
+        temp[i++] = arr[sr++];
+    }
+
+    for (j = save; j <= er; j++) {
+        arr[j] = temp[j];
+    }
+
+    delete[] temp;
 }
