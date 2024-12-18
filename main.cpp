@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 
     initArray1(myArray, SIZE);
     printArray(myArray, SIZE);
-    selectionSort(myArray, SIZE);
+    insertionSort(myArray, SIZE);
     cout << "\nAfter sort\n" << endl;
     printArray(myArray, SIZE);
 
@@ -94,5 +94,18 @@ void selectionSort(int arr[], int size) {
         int temp = arr[i];
         arr[i] = arr[min];
         arr[min] = temp;
+    }
+}
+void insertionSort(int arr[], int n) {
+    int i, key, j;
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
     }
 }
