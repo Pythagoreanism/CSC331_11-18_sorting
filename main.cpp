@@ -14,6 +14,7 @@ void insertionSort(int[], int);
 void mergeSort(int[], int, int);
 void merge(int[], int, int, int, int);
 void heapSort(int[], int);
+void heapify(int[], int, int);
 void quickSort(int[], int);
 
 
@@ -24,9 +25,10 @@ int main(int argc, char* argv[]) {
 
     initArray1(myArray, SIZE);
     printArray(myArray, SIZE);
-    // selectionSort(myArray, SIZE);
-    insertionSort(myArray, SIZE);
-    mergeSort(myArray, 0, SIZE);
+ // selectionSort(myArray, SIZE);
+ // insertionSort(myArray, SIZE);
+ // mergeSort(myArray, 0, SIZE);
+    heapSort(myArray, SIZE);
     cout << "\nAfter sort\n" << endl;
     printArray(myArray, SIZE);
 
@@ -148,4 +150,32 @@ void merge(int arr[], int sl, int el, int sr, int er) {
     }
 
     delete[] temp;
+}
+void heapSort(int arr[], int size) {
+    for (int i = (size / 2) - 1; i >= 0; i--) {
+        heapify(arr, i, size - 1);
+    }
+    
+    for (int i = size - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        // Swap
+        heapify(arr, 0, i - 1);
+    }
+}
+void heapify(int arr[], int first, int last) {
+    int max = 2 * first + 1;
+
+    if (max <= last) {
+        // Comparison
+        if (max < last && arr[max + 1] > arr[max]) {
+            // Comparison
+            max += 1;
+        }
+        if (arr[max] > arr[first]) {
+            // Comparison
+            // Swap
+            swap(arr[max], arr[first]);
+            heapify(arr, max, last);
+        }
+    }
 }
