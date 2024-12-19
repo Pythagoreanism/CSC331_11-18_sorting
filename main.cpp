@@ -18,6 +18,8 @@ void heapify(int[], int, int);
 void quickSort(int[], int, int);
 int split(int[], int, int);
 
+int swaps = 0;
+int comparisons = 0;
 
 int main(int argc, char* argv[]) {
     srand(time(NULL)); // Initialize random seed
@@ -146,6 +148,10 @@ int main(int argc, char* argv[]) {
                                 cout << "Array succesfully sorted with Selection Sort" << endl;
                                 cout << "\nArray after sort" << endl;
                                 printArray(p, size);
+                                cout << "Number of swaps: " << swaps << endl;
+                                cout << "Number of comparisons: " << comparisons << endl;
+                                swaps = 0;
+                                comparisons = 0;
                             }
                             else {
                                 cout << "Create an array first!" << endl;
@@ -158,6 +164,10 @@ int main(int argc, char* argv[]) {
                                 cout << "Array succesfully sorted with Insertion Sort" << endl;
                                 cout << "\nArray after sort" << endl;
                                 printArray(p, size);
+                                cout << "Number of swaps: " << swaps << endl;
+                                cout << "Number of comparisons: " << comparisons << endl;
+                                swaps = 0;
+                                comparisons = 0;
                             }
                             else {
                                 cout << "Create an array first!" << endl;
@@ -170,6 +180,10 @@ int main(int argc, char* argv[]) {
                                 cout << "Array succesfully sorted with Merge Sort" << endl;
                                 cout << "\nArray after sort" << endl;
                                 printArray(p, size);
+                                cout << "Number of swaps: " << swaps << endl;
+                                cout << "Number of comparisons: " << comparisons << endl;
+                                swaps = 0;
+                                comparisons = 0;
                             }
                             else {
                                 cout << "Create an array first!" << endl;
@@ -182,6 +196,10 @@ int main(int argc, char* argv[]) {
                                 cout << "Array succesfully sorted with Heap Sort" << endl;
                                 cout << "\nArray after sort" << endl;
                                 printArray(p, size);
+                                cout << "Number of swaps: " << swaps << endl;
+                                cout << "Number of comparisons: " << comparisons << endl;
+                                swaps = 0;
+                                comparisons = 0;
                             }
                             else {
                                 cout << "Create an array first!" << endl;
@@ -194,6 +212,10 @@ int main(int argc, char* argv[]) {
                                 cout << "Array succesfully sorted with Quick Sort" << endl;
                                 cout << "\nArray after sort" << endl;
                                 printArray(p, size);
+                                cout << "Number of swaps: " << swaps << endl;
+                                cout << "Number of comparisons: " << comparisons << endl;
+                                swaps = 0;
+                                comparisons = 0;
                             }
                             else {
                                 cout << "Create an array first!" << endl;
@@ -295,20 +317,17 @@ int* initArray4(int size) {
 }
 void selectionSort(int arr[], int size) {
     for (int i = 0; i < size + 1; i++) {
-
         // Search for minimum within unsorted section
         int min = i;
         for (int j = i + 1; j < size; j++) {
+            comparisons++;
             if (arr[j] < arr[min]) {
                 min = j;
             }
-
         }
         
-        // Swap
-        int temp = arr[i];
-        arr[i] = arr[min];
-        arr[min] = temp;
+        swap(arr[min], arr[i]);
+        swaps++;
     }
 }
 void insertionSort(int arr[], int size) {
@@ -318,9 +337,12 @@ void insertionSort(int arr[], int size) {
         j = i - 1;
 
         while (j >= 0 && arr[j] > key) {
+            comparisons++;
             arr[j + 1] = arr[j];
             j = j - 1;
+            swaps++;
         }
+        comparisons++;
         arr[j + 1] = key;
     }
 }
@@ -339,7 +361,7 @@ void merge(int arr[], int sl, int el, int sr, int er) {
     int save = sl;
 
     while (sl <= el && sr <= er) {
-        // Comparisons
+        comparisons++;
         if (arr[sl] < arr[sr]) {
             temp[i++] = arr[sl++];
         }
@@ -357,6 +379,7 @@ void merge(int arr[], int sl, int el, int sr, int er) {
 
     for (j = save; j <= er; j++) {
         arr[j] = temp[j];
+        swaps++;
     }
 
     delete[] temp;
@@ -368,7 +391,7 @@ void heapSort(int arr[], int size) {
     
     for (int i = size - 1; i > 0; i--) {
         swap(arr[0], arr[i]);
-        // Swap
+        swaps++;
         heapify(arr, 0, i - 1);
     }
 }
@@ -376,15 +399,14 @@ void heapify(int arr[], int first, int last) {
     int max = 2 * first + 1;
 
     if (max <= last) {
-        // Comparison
+        comparisons++;
         if (max < last && arr[max + 1] > arr[max]) {
-            // Comparison
             max += 1;
         }
+        comparisons++;
         if (arr[max] > arr[first]) {
-            // Comparison
-            // Swap
             swap(arr[max], arr[first]);
+            swaps++;
             heapify(arr, max, last);
         }
     }
@@ -401,15 +423,15 @@ int split(int arr[], int first, int last) {
     int pivot = arr[first];
 
     for (int i = first + 1; i <= last; i++) {
-        // Comparison
+        comparisons++;
         if (arr[i] < pivot) {
             pivotPosition++;
             swap(arr[pivotPosition], arr[i]);
-            // Swap
+            swaps++;
         }
     }
     swap(arr[pivotPosition], arr[first]);
-    // Swap
+    swaps++;
     
     return pivotPosition;
 }
