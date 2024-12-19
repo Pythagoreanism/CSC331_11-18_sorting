@@ -5,10 +5,10 @@ using namespace std;
 
 
 void printArray(int[], int);
-void initArray1(int[], int); // a. Completely random
-void initArray2(int[], int); // b. Almost sorted in ascending order
-void initArray3(int[], int); // c. Almost reversed similar to b.
-void initArray4(int[], int); // d. Sorted except last 10%
+int* initArray1(int); // a. Completely random
+int* initArray2(int); // b. Almost sorted in ascending order
+int* initArray3(int); // c. Almost reversed similar to b.
+int* initArray4(int); // d. Sorted except last 10%
 void selectionSort(int[], int);
 void insertionSort(int[], int);
 void mergeSort(int[], int, int);
@@ -21,18 +21,209 @@ int split(int[], int, int);
 
 int main(int argc, char* argv[]) {
     srand(time(NULL)); // Initialize random seed
-    const int SIZE = 30;
-    int myArray[SIZE]; // Initializes array elements to 0
+    const int SIZE_SMALL = 128;
+    const int SIZE_LARGE = 1024;
+    int size = 0;
+    int* p = nullptr; // To hold array during runtime
+    char userOpt = '\0'; // User option
+    const char QUIT_OPT = 'Q'; // Sentinel
 
-    initArray1(myArray, SIZE);
-    printArray(myArray, SIZE);
- // selectionSort(myArray, SIZE);
- // insertionSort(myArray, SIZE);
- // mergeSort(myArray, 0, SIZE);
- // heapSort(myArray, SIZE);
-    quickSort(myArray, 0, SIZE);
-    cout << "\nAfter sort\n" << endl;
-    printArray(myArray, SIZE);
+    do {
+        userOpt = '\0'; // Reset
+
+        cout << "\n**********MENU**********"   << endl;
+        cout << "1: Create an array"           << endl;
+        cout << "2: Print your array"          << endl;
+        cout << "3: Test a sorting algorithm"  << endl;
+        cout << "Q: Quit Program"              << endl;
+        cout << "Choose option: ";
+        cin >> userOpt;
+
+        switch (userOpt) {
+            case '1': // Create an array menu
+                do {
+                    cout << "\n*****Create an Array*****"                           << endl;
+                    cout << "S: Set size of array to 128 elements"                  << endl;
+                    cout << "L: Set size of array to 1024 elements"                 << endl;
+                    cout << "Current array size: " << size                          << endl;
+                    cout << "----------------------------------------------------"  << endl;
+                    cout << "1: Initialize array completely random"                 << endl;
+                    cout << "2: Initialize array almost sorted in ascending order"  << endl;
+                    cout << "3: Initialize array almost sorted in descending order" << endl;
+                    cout << "4: Initialize array sorted except last 10%"            << endl;
+                    cout << "Q: Quit Create an Array Menu"                          << endl;
+                    cout << "Choose option: ";
+                    cin >> userOpt;
+
+                    switch (userOpt) {
+                        case 'S':
+                            size = SIZE_SMALL;
+                            break;
+                            
+                        case 'L':
+                            size = SIZE_LARGE;
+                            break;
+
+                        case '1':
+                            if (size != 0) {
+                                p = initArray1(size);
+                                cout << "Array initialized successfully." << endl;
+                            }
+                            else {
+                                cout << "Select a size first!" << endl;
+                            }
+                            break;
+
+                        case '2':
+                            if (size != 0) {
+                                p = initArray2(size);
+                                cout << "Array initialized successfully." << endl;
+                            }
+                            else {
+                                cout << "Select a size first!" << endl;
+                            }
+                            break;
+
+                        case '3':
+                            if (size != 0) {
+                                p = initArray3(size);
+                                cout << "Array initialized successfully." << endl;
+                            }
+                            else {
+                                cout << "Select a size first!" << endl;
+                            }
+                            break;
+
+                        case '4':
+                            if (size != 0) {
+                                p = initArray4(size);
+                                cout << "Array initialized successfully." << endl;
+                            }
+                            else {
+                                cout << "Select a size first!" << endl;
+                            }
+                            break;
+
+                        case 'Q':
+                            cout << "Exiting Array Menu" << endl;
+                            break;
+
+                        default:
+                            cerr << "ERROR: Invalid input in  Create an Array Menu" << endl;
+                            break;
+
+                    }
+                } while (userOpt != QUIT_OPT);
+                userOpt = '\0'; // Reset user option after exiting sub-menu
+                break;
+            
+            case '2':
+                if (p == nullptr) {
+                    cout << "Create an array first!" << endl;
+                }
+                else {
+                    printArray(p, size);
+                }
+                userOpt = '\0'; // Reset user option after exiting sub-menu
+                break;
+
+            case '3': // Testing algorithm menu
+                do {
+                    cout << "\n****Test Sorting Algorithm****" << endl;
+                    cout << "1: Test Selection Sort"           << endl;
+                    cout << "2: Test Insertion Sort"           << endl;
+                    cout << "3: Test Merge Sort"               << endl;
+                    cout << "4: Test Heap Sort"                << endl;
+                    cout << "5: Test Quick Sort"               << endl;
+                    cout << "Q: Quit Sorting Menu"             << endl;
+                    cout << "Choose option: ";
+                    cin >> userOpt;
+
+                    switch (userOpt) {
+                        case '1': // Selection Sort
+                            if (size != 0) {
+                                selectionSort(p, size);
+                                cout << "Array succesfully sorted with Selection Sort" << endl;
+                                cout << "\nArray after sort" << endl;
+                                printArray(p, size);
+                            }
+                            else {
+                                cout << "Create an array first!" << endl;
+                            }
+                            break;
+                        
+                        case '2': // Insertion Sort
+                            if (size != 0) {
+                                insertionSort(p, size);
+                                cout << "Array succesfully sorted with Insertion Sort" << endl;
+                                cout << "\nArray after sort" << endl;
+                                printArray(p, size);
+                            }
+                            else {
+                                cout << "Create an array first!" << endl;
+                            }
+                            break;
+                        
+                        case '3': // Merge sort
+                            if (size != 0) {
+                                mergeSort(p, 0, size);
+                                cout << "Array succesfully sorted with Merge Sort" << endl;
+                                cout << "\nArray after sort" << endl;
+                                printArray(p, size);
+                            }
+                            else {
+                                cout << "Create an array first!" << endl;
+                            }
+                            break;
+                        
+                        case '4': // Heap sort
+                            if (size != 0) {
+                                heapSort(p, size);
+                                cout << "Array succesfully sorted with Heap Sort" << endl;
+                                cout << "\nArray after sort" << endl;
+                                printArray(p, size);
+                            }
+                            else {
+                                cout << "Create an array first!" << endl;
+                            }
+                            break;
+                        
+                        case '5': // Quick sort
+                            if (size != 0) {
+                                quickSort(p, 0, size);
+                                cout << "Array succesfully sorted with Quick Sort" << endl;
+                                cout << "\nArray after sort" << endl;
+                                printArray(p, size);
+                            }
+                            else {
+                                cout << "Create an array first!" << endl;
+                            }
+                            break;
+
+                        default:
+                            cerr << "ERROR: Invalid input in Create an Sorting Menu" << endl;
+                            break;
+
+                    }
+                } while (userOpt != QUIT_OPT);
+                userOpt = '\0'; // Reset user option after exiting sub-menu
+                break;
+                
+            case 'Q': // Exit program
+                cout << "Exiting Main Menu..." << endl;
+                break;
+
+            default:
+                cerr << "ERROR: Invalid input in Main Menu" << endl;
+                break;
+
+        }
+
+    } while (userOpt != QUIT_OPT);
+    
+    cout << "Exiting program..." << endl;
+    delete[] p;
+    p = nullptr;
 
 
     return 0;
@@ -44,46 +235,63 @@ void printArray(int arr[], int size) {
         cout << i + 1 << ": " << arr[i] << endl;
     }
 }
-void initArray1(int arr[], int size) {
+int* initArray1(int size) {
+    int* arrPtr = nullptr;
+    arrPtr = new int[size];
+
     for (unsigned int i = 0; i < size; i++) {
-        arr[i] = rand() % 101;
+        arrPtr[i] = rand() % 101;
     }
+
+    return arrPtr;
 }
-void initArray2(int arr[], int size) {
+int* initArray2(int size) {
+    int* arrPtr = nullptr;
+    arrPtr = new int[size];
     int next = 0;
 
     for (unsigned int i = 0; i < size; i++) { // Fill array w/ randomly incremented numbers
         next = next + ((rand() % 5) + 1); // Not incrementing too much
-        arr[i] = next;
+        arrPtr[i] = next;
     }
 
     for (unsigned int i = 0; i < size * .1; i++) { // Make 10% random
-        arr[rand() % size + 1] = rand() % 1024; // Make random element random
+        arrPtr[rand() % size + 1] = rand() % 1024; // Make random element random
     }
+
+    return arrPtr;
 }
-void initArray3(int arr[], int size) {
+int* initArray3(int size) {
+    int* arrPtr = nullptr;
+    arrPtr = new int[size];
     int next = 0;
 
     for (int i = size - 1; i >= 0; i--) { // Fill array w/ randomly incremented numbers
         next = next + ((rand() % 5) + 1); // Not incrementing too much
-        arr[i] = next;
+        arrPtr[i] = next;
     }
 
     for (unsigned int i = 0; i < size * .1; i++) {
-        arr[rand() % size + 1] = rand() % 1024;
+        arrPtr[rand() % size + 1] = rand() % 1024;
     }
+
+    return arrPtr;
 }
-void initArray4(int arr[], int size) {
+int* initArray4(int size) {
+    int* arrPtr = nullptr;
+    arrPtr = new int[size];
     int next = 0;
 
     for (unsigned int i = 0; i < size; i++) {
         next = next + ((rand() % 5) + 1);
-        arr[i] = next;
+        arrPtr[i] = next;
     }
 
     for (unsigned int i = size - (size * .1); i < size; i++) {
-        arr[i] = rand() % 1024;
+        arrPtr[i] = rand() % 1024;
     }
+
+    return arrPtr;
 }
 void selectionSort(int arr[], int size) {
     for (int i = 0; i < size + 1; i++) {
@@ -103,9 +311,9 @@ void selectionSort(int arr[], int size) {
         arr[min] = temp;
     }
 }
-void insertionSort(int arr[], int n) {
+void insertionSort(int arr[], int size) {
     int i, key, j;
-    for (i = 1; i < n; i++) {
+    for (i = 1; i < size; i++) {
         key = arr[i];
         j = i - 1;
 
