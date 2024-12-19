@@ -15,7 +15,8 @@ void mergeSort(int[], int, int);
 void merge(int[], int, int, int, int);
 void heapSort(int[], int);
 void heapify(int[], int, int);
-void quickSort(int[], int);
+void quickSort(int[], int, int);
+int split(int[], int, int);
 
 
 int main(int argc, char* argv[]) {
@@ -28,7 +29,8 @@ int main(int argc, char* argv[]) {
  // selectionSort(myArray, SIZE);
  // insertionSort(myArray, SIZE);
  // mergeSort(myArray, 0, SIZE);
-    heapSort(myArray, SIZE);
+ // heapSort(myArray, SIZE);
+    quickSort(myArray, 0, SIZE);
     cout << "\nAfter sort\n" << endl;
     printArray(myArray, SIZE);
 
@@ -178,4 +180,28 @@ void heapify(int arr[], int first, int last) {
             heapify(arr, max, last);
         }
     }
+}
+void quickSort(int arr[], int start, int end) {
+    if (start < end) {
+        int position = split(arr, start, end);
+        quickSort(arr, start, position - 1);
+        quickSort(arr, position + 1, end);
+    }
+}
+int split(int arr[], int first, int last) {
+    int pivotPosition = first;
+    int pivot = arr[first];
+
+    for (int i = first + 1; i <= last; i++) {
+        // Comparison
+        if (arr[i] < pivot) {
+            pivotPosition++;
+            swap(arr[pivotPosition], arr[i]);
+            // Swap
+        }
+    }
+    swap(arr[pivotPosition], arr[first]);
+    // Swap
+    
+    return pivotPosition;
 }
