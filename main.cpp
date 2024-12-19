@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <random>
 using namespace std;
 
 
@@ -68,8 +69,10 @@ int main(int argc, char* argv[]) {
 
                         case '1':
                             if (size != 0) {
+                                //delete[] p;
                                 p = initArray1(size);
-                                cout << "Array initialized successfully." << endl;
+                                cout << "Array initialized successfully:" << endl;
+                                printArray(p, size);
                             }
                             else {
                                 cout << "Select a size first!" << endl;
@@ -78,8 +81,10 @@ int main(int argc, char* argv[]) {
 
                         case '2':
                             if (size != 0) {
+                                //delete[] p;
                                 p = initArray2(size);
-                                cout << "Array initialized successfully." << endl;
+                                cout << "Array initialized successfully:" << endl;
+                                printArray(p, size);
                             }
                             else {
                                 cout << "Select a size first!" << endl;
@@ -88,8 +93,10 @@ int main(int argc, char* argv[]) {
 
                         case '3':
                             if (size != 0) {
+                                //delete[] p;
                                 p = initArray3(size);
-                                cout << "Array initialized successfully." << endl;
+                                cout << "Array initialized successfully:" << endl;
+                                printArray(p, size);
                             }
                             else {
                                 cout << "Select a size first!" << endl;
@@ -98,8 +105,10 @@ int main(int argc, char* argv[]) {
 
                         case '4':
                             if (size != 0) {
+                                //delete[] p;
                                 p = initArray4(size);
-                                cout << "Array initialized successfully." << endl;
+                                cout << "Array initialized successfully:" << endl;
+                                printArray(p, size);
                             }
                             else {
                                 cout << "Select a size first!" << endl;
@@ -119,14 +128,13 @@ int main(int argc, char* argv[]) {
                 userOpt = '\0'; // Reset user option after exiting sub-menu
                 break;
             
-            case '2':
+            case '2': // Print array
                 if (p == nullptr) {
                     cout << "Create an array first!" << endl;
                 }
                 else {
                     printArray(p, size);
                 }
-                userOpt = '\0'; // Reset user option after exiting sub-menu
                 break;
 
             case '3': // Testing algorithm menu
@@ -143,7 +151,7 @@ int main(int argc, char* argv[]) {
 
                     switch (userOpt) {
                         case '1': // Selection Sort
-                            if (size != 0) {
+                            if (p != nullptr) {
                                 selectionSort(p, size);
                                 cout << "Array succesfully sorted with Selection Sort" << endl;
                                 cout << "\nArray after sort" << endl;
@@ -159,7 +167,7 @@ int main(int argc, char* argv[]) {
                             break;
                         
                         case '2': // Insertion Sort
-                            if (size != 0) {
+                            if (p != nullptr) {
                                 insertionSort(p, size);
                                 cout << "Array succesfully sorted with Insertion Sort" << endl;
                                 cout << "\nArray after sort" << endl;
@@ -175,8 +183,8 @@ int main(int argc, char* argv[]) {
                             break;
                         
                         case '3': // Merge sort
-                            if (size != 0) {
-                                mergeSort(p, 0, size);
+                            if (p != nullptr) {
+                                mergeSort(p, 0, size - 1);
                                 cout << "Array succesfully sorted with Merge Sort" << endl;
                                 cout << "\nArray after sort" << endl;
                                 printArray(p, size);
@@ -191,7 +199,7 @@ int main(int argc, char* argv[]) {
                             break;
                         
                         case '4': // Heap sort
-                            if (size != 0) {
+                            if (p != nullptr) {
                                 heapSort(p, size);
                                 cout << "Array succesfully sorted with Heap Sort" << endl;
                                 cout << "\nArray after sort" << endl;
@@ -207,8 +215,8 @@ int main(int argc, char* argv[]) {
                             break;
                         
                         case '5': // Quick sort
-                            if (size != 0) {
-                                quickSort(p, 0, size);
+                            if (p != nullptr) {
+                                quickSort(p, 0, size -1);
                                 cout << "Array succesfully sorted with Quick Sort" << endl;
                                 cout << "\nArray after sort" << endl;
                                 printArray(p, size);
@@ -220,6 +228,10 @@ int main(int argc, char* argv[]) {
                             else {
                                 cout << "Create an array first!" << endl;
                             }
+                            break;
+                        
+                        case 'Q':
+                            cout << "Exiting Testing Algorithm Menu" << endl;
                             break;
 
                         default:
@@ -258,59 +270,66 @@ void printArray(int arr[], int size) {
     }
 }
 int* initArray1(int size) {
-    int* arrPtr = nullptr;
-    arrPtr = new int[size];
+    int* arrPtr = new int[size];
 
-    for (unsigned int i = 0; i < size; i++) {
-        arrPtr[i] = rand() % 101;
+    random_device rd; // Seed
+    mt19937 gen(rd());
+    uniform_int_distribution<> dis(0, 1024); // Range 0 - 1024
+
+    for (int i = 0; i < size; i++) {
+        arrPtr[i] = dis(gen);
     }
 
     return arrPtr;
 }
 int* initArray2(int size) {
-    int* arrPtr = nullptr;
-    arrPtr = new int[size];
+    int* arrPtr = new int[size];
     int next = 0;
 
-    for (unsigned int i = 0; i < size; i++) { // Fill array w/ randomly incremented numbers
-        next = next + ((rand() % 5) + 1); // Not incrementing too much
+    for (int i = 0; i < size; i++) { // Generate an increasing sequence
+        next += (rand() % 5) + 1; // Increment small random amounts
         arrPtr[i] = next;
     }
 
-    for (unsigned int i = 0; i < size * .1; i++) { // Make 10% random
-        arrPtr[rand() % size + 1] = rand() % 1024; // Make random element random
+    // Randomize 10% of the array
+    int randomElements = size / 10; // 10% of size
+    for (int i = 0; i < randomElements; i++) {
+        int randomIndex = rand() % size; // Valid index
+        arrPtr[randomIndex] = rand() % 1024; // Replace with random value
     }
 
     return arrPtr;
 }
 int* initArray3(int size) {
-    int* arrPtr = nullptr;
-    arrPtr = new int[size];
+    int* arrPtr = new int[size];
     int next = 0;
 
-    for (int i = size - 1; i >= 0; i--) { // Fill array w/ randomly incremented numbers
-        next = next + ((rand() % 5) + 1); // Not incrementing too much
+    for (int i = size - 1; i >= 0; i--) { // Generate a decreasing sequence
+        next += (rand() % 5) + 1; // Decrement small random amounts
         arrPtr[i] = next;
     }
 
-    for (unsigned int i = 0; i < size * .1; i++) {
-        arrPtr[rand() % size + 1] = rand() % 1024;
+    // Randomize 10% of the array
+    int randomElements = size / 10; // 10% of size
+    for (int i = 0; i < randomElements; i++) {
+        int randomIndex = rand() % size; // Valid index
+        arrPtr[randomIndex] = rand() % 1024; // Replace with random value
     }
 
     return arrPtr;
 }
 int* initArray4(int size) {
-    int* arrPtr = nullptr;
-    arrPtr = new int[size];
+    int* arrPtr = new int[size];
     int next = 0;
 
-    for (unsigned int i = 0; i < size; i++) {
-        next = next + ((rand() % 5) + 1);
+    for (int i = 0; i < size; i++) {
+        next += (rand() % 5) + 1;
         arrPtr[i] = next;
     }
 
-    for (unsigned int i = size - (size * .1); i < size; i++) {
-        arrPtr[i] = rand() % 1024;
+    int startIndex = size - (size / 10); // Integer division for 10%
+    for (int i = startIndex; i < size; i++) {
+        arrPtr[i] = rand() % 1024; // Replace with random value
     }
 
     return arrPtr;
